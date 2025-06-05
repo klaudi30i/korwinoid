@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generator wypowiedzi Korwina</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#990000" />
+  <link rel="icon" href="icon.png" type="image/png" />
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #fefefe;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1 {
+      color: #990000;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #990000;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background-color: #cc0000;
+    }
+    #output {
+      margin-top: 30px;
+      font-size: 22px;
+      color: #222;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #history {
+      margin-top: 30px;
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+    }
+    img {
+      display: block;
+      margin: 30px auto;
+      max-width: 300px;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Generator wypowiedzi Janusza Korwin-Mikkego</h1>
+  <img src="https://media.tenor.com/tILzBJDGvG8AAAAd/korwin-mikke-jkm.gif" alt="Korwin" />
+  <div id="output">Kliknij przycisk poniżej, aby wygenerować wypowiedź.</div>
+  <button onclick="generuj()">🎲 Wygeneruj wypowiedź</button>
+  <button onclick="kopiuj()">📋 Kopiuj historię</button>
+  <div id="history">
+    <h3>📜 Historia wypowiedzi:</h3>
+    <textarea id="historiaText" readonly></textarea>
+  </div>
+
+  <script>
+    const kolumny = [
+      ["Ja chcę powiedzieć jedną rzecz:", "Trzeba powiedzieć jasno:", "Jak powiedział wybitny krakowianin Stanisław Lem,", "Proszę mnie dobrze zrozumieć:", "Ja chciałem państwu przypomnieć, że", "Niech państwo nie mają złudzeń:", "Powiedzmy to wyraźnie:"],
+      ["przedstawiciele czerwonej hołoty", "ci wszyscy (tfu!) geje", "funkcjonariusze reżimowej telewizji", "tak zwani ekolodzy", "ci wszyscy (tfu!) demokraci", "agenci bezpieki", "feminazistki"],
+      ["zupełnie bezkarnie", "całkowicie bezczelnie", "o poglądach na lewo od komunizmu", "celowo i świadomie", "z premedytacją", "od czasów Okrągłego Stołu", "w ramach postępu"],
+      ["nawołują do podniesienia podatków", "próbują wyrzucić kierowców z miast", "próbują skłócić Polskę z Rosją", "głoszą brednie o globalnym ociepleniu", "zakazują posiadania broni", "nie dopuszczają prawicy do władzy", "uczą dzieci homoseksualizmu"],
+      ["bo dzięki temu mogą kraść", "bo dostają za to pieniądze", "bo tak się uczy na państwowych szkołach", "bo bez tego (tfu!) demokracja nie ma sensu", "bo głupich jest więcej niż mądrych", "bo chcą tworzyć raj na ziemi", "bo chcą zniszczyć cywilizację białego człowieka"],
+      ["przez kolejne kadencje.", "o czym się nie mówi.", "i właśnie dlatego Europa umiera.", "a przecież muzułmanie i robią dokładnie to samo.", "– tak samo zresztą jak za Hitlera.", "– proszę zobaczyć, co się dzieje na Zachodzie, jeśli mi państwo nie wierzą.", "co lat temu nikt nawet by sobie nie przyszło do głowy."]
+    ];
+
+    let historia = [];
+
+    function generuj() {
+      const zdanie = kolumny.map(k => k[Math.floor(Math.random() * k.length)]).join(" ");
+      document.getElementById("output").innerText = zdanie;
+      historia.unshift(zdanie);
+      document.getElementById("historiaText").value = historia.join("\n\n");
+    }
+
+    function kopiuj() {
+      const pole = document.getElementById("historiaText");
+      pole.select();
+      document.execCommand("copy");
+      alert("Historia skopiowana do schowka!");
+    }
+
+    // PWA - rejestracja service workera
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('✅ Service Worker zarejestrowany!'))
+          .catch(err => console.error('❌ Błąd rejestracji SW:', err));
+      });
+    }
+  </script>
+</body>
+</html>
